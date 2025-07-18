@@ -1,16 +1,28 @@
+version: '3.8'
+
 services:
   web:
     build: .
     container_name: api_realtime_php
+    # PORT muhit o'zgaruvchisini ham uzatamiz
     ports:
       - "5000:5000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PORT: "5000"
+      DB_HOST: "167.235.222.200"
+      DB_PORT: "3306"
+      DB_USER: "ulogist1_user_uz"
+      DB_PASS: "parol3797A@"
+      DB_NAME: "ulogist1_db_uz"
+      GOOGLE_MAPS_API_KEY: "AIzaSyAd4rEAQqf58fCJGABqW99teDP9BcuyN08"
+    # Kodni qayta yuklash uchun faqat devda kerak,
+    # productionda o'chiring yoki alohida override qiling
     volumes:
       - .:/app
-    environment:
-      - PYTHONUNBUFFERED=1
-      - DB_HOST=167.235.222.200
-      - DB_PORT=3306
-      - DB_USER=ulogist1_user_uz
-      - DB_PASS=parol3797A@
-      - DB_NAME=ulogist1_db_uz
+    # Gunicorn orqali production‑ready serverni ishga tushiramiz
+    command: >
+      gunicorn app:app
+      --bind 0.0.0.0:5000
+      --timeout 120
     restart: unless-stopped
