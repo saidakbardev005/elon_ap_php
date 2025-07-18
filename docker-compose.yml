@@ -4,7 +4,7 @@ services:
   web:
     build: .
     container_name: api_realtime_php
-    # PORT muhit o'zgaruvchisini ham uzatamiz
+    # Docker Compose mapping — lokal 5000 → konteyner 5000
     ports:
       - "5000:5000"
     environment:
@@ -16,13 +16,11 @@ services:
       DB_PASS: "parol3797A@"
       DB_NAME: "ulogist1_db_uz"
       GOOGLE_MAPS_API_KEY: "AIzaSyAd4rEAQqf58fCJGABqW99teDP9BcuyN08"
-    # Kodni qayta yuklash uchun faqat devda kerak,
-    # productionda o'chiring yoki alohida override qiling
     volumes:
       - .:/app
-    # Gunicorn orqali production‑ready serverni ishga tushiramiz
+    # JSON‑aray emas, shell‑form — $PORT kengayadi
     command: >
       gunicorn app:app
-      --bind 0.0.0.0:5000
+      --bind 0.0.0.0:$PORT
       --timeout 120
     restart: unless-stopped
